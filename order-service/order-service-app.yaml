@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    deployment.kubernetes.io/revision: "1"
+  labels:
+    app: order-service
+  name: order-service
+  namespace: default
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 1
+  selector:
+    matchLabels:
+      app: order-service
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: order-service
+    spec:
+      containers:
+        - image: 448877123666/order-service:0.0.1-SNAPSHOT
+          imagePullPolicy: IfNotPresent
+          name: order-service
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      terminationGracePeriodSeconds: 30
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: order-service
+  name: order-service-np
+  namespace: default
+spec:
+  externalTrafficPolicy: Cluster
+  ports:
+    - nodePort: 32075
+      port: 8080
+      protocol: TCP
+      targetPort: 8080
+  selector:
+    app: order-service
+  sessionAffinity: None
+  type: NodePort
