@@ -1,4 +1,4 @@
-package com.apedano.orderservice;
+package com.apedano.ftgo.orderservice;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
