@@ -14,7 +14,10 @@ public class Item implements Serializable {
     private BigDecimal weight;
     private BigDecimal price;
 
-    private Item(String name, BigDecimal weight, BigDecimal price) {
+    public Item() {
+    }
+
+    protected Item(String name, BigDecimal weight, BigDecimal price) {
         this.name = name;
         this.weight = weight;
         this.price = price;
@@ -30,6 +33,18 @@ public class Item implements Serializable {
 
     public BigDecimal getPrice() {
         return price;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setWeight(BigDecimal weight) {
+        this.weight = weight;
+    }
+
+    public void setPrice(BigDecimal price) {
+        this.price = price;
     }
 
     @Override

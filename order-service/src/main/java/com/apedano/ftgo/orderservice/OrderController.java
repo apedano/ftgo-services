@@ -1,8 +1,7 @@
 package com.apedano.ftgo.orderservice;
 
-import com.apedano.ftgo.model.Item;
-import com.apedano.ftgo.model.Order;
-import com.apedano.ftgo.model.OrderItem;
+import com.apedano.ftgo.model.*;
+import com.apedano.ftgo.orderservice.persistence.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +10,11 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.Collection;
+import java.util.Collections;
 
 @RestController
 public class OrderController {
@@ -21,7 +25,12 @@ public class OrderController {
     private String myValue;
 
     @Autowired
-    OrderMessagingService orderMessagingService;
+    private OrderMessagingService orderMessagingService;
+
+
+
+    @Autowired
+    private OrderService orderService;
 
 
     /**
@@ -41,11 +50,13 @@ public class OrderController {
     @GetMapping("/create-order")
     public String greeting(Model model) {
         LOGGER.info("Create order request received");
-        OrderItem twoPizzas = new OrderItem(Item.PIZZA, 2);
-        Order order = new Order(twoPizzas);
-        orderMessagingService.send(order);
-        LOGGER.info("Order sent");
-        return order.toString();
+        OrderJpa orderJpa = orderService.create();
+        LOGGER.debug("Order created");
+        orderService.save(orderJpa);
+        LOGGER.debug("Order persisted");
+//        orderMessagingService.send(orderJpa);
+        LOGGER.debug("Order sent");
+        return orderJpa.toString();
     }
 
 
