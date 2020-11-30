@@ -1,0 +1,34 @@
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1"%>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+ xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="ISO-8859-1">
+<title>User Registration Form</title>
+</head>
+<body>
+<div align="center">
+    <h2>User Registration</h2>
+    <form method="POST" th:action="@{/save-order}" th:object="${dto}">
+        <input th:field="*{reference}" readonly />
+
+        <div class="container">
+            <div th:each="orderItem, itemStat : *{allOrderItems}" class="row">
+                <div class="col">
+                    <input th:field="*{allOrderItems[__${itemStat.index}__].item.name}" readonly />
+                </div>
+                <div class="col">
+                    <input th:field="*{allOrderItems[__${itemStat.index}__].item.quantity}" readonly />
+                </div>
+            </div>
+        </div>
+        <input type="submit" id="submitButton" th:value="Save">
+    </form>
+</div>
+<script th:src="@{/webjars/jquery/3.0.0/jquery.min.js}"></script>
+<script th:src="@{/webjars/popper.js/1.12.9-1/umd/popper.min.js}"></script>
+<script th:src="@{/webjars/bootstrap/4.0.0-2/js/bootstrap.min.js}"></script>
+</body>
+</html>

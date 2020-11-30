@@ -6,7 +6,6 @@ import org.springframework.data.repository.CrudRepository;
 import java.util.List;
 
 public interface OrderRepository extends CrudRepository<OrderJpa, Long> {
-
-//    OrderJpa findByOrderId(String orderId);
+       public OrderJpa findByReference(String reference);
 
 }

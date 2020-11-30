@@ -55,7 +55,7 @@ public class Order implements Serializable {
     @Override
     public String toString() {
         return "Order{" +
-                "orderId='" + reference + '\'' +
+                "reference='" + reference + '\'' +
                 ", creationDate=" + creationDate +
                 ", orderItems=" + orderItems +
                 ", statuseEvents=" + statuseEvents +

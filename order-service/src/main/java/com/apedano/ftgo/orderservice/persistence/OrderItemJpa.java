@@ -3,6 +3,7 @@ package com.apedano.ftgo.orderservice.persistence;
 import com.apedano.ftgo.model.Item;
 import com.apedano.ftgo.model.Order;
 import com.apedano.ftgo.model.OrderItem;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 
@@ -40,6 +41,7 @@ public class OrderItemJpa extends OrderItem {
     @Override
     @ManyToOne(cascade = CascadeType.ALL, targetEntity = OrderJpa.class)
     @JoinColumn(name="order_id", nullable=false) //owning part of the association
+    @JsonIgnore
     public Order getOrder() {
         return super.getOrder();
     }

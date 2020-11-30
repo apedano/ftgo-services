@@ -10,6 +10,10 @@ public class OrderItem implements Serializable {
     public OrderItem() {
     }
 
+    public OrderItem(Item item) {
+        this.item = item;
+    }
+
     public Item getItem() {
         return item;
     }

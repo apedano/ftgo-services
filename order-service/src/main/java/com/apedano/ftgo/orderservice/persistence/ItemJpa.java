@@ -18,6 +18,10 @@ public class ItemJpa extends Item {
     public ItemJpa() {
     }
 
+    public ItemJpa(Item item) {
+        super(item.getName(), item.getWeight(), item.getPrice());
+    }
+
     private long id;
 
     @Id

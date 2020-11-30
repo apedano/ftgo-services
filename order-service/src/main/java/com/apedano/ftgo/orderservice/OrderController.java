@@ -6,15 +6,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.MediaType;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.Collection;
-import java.util.Collections;
+import java.util.*;
 
 @RestController
 public class OrderController {
@@ -27,11 +27,14 @@ public class OrderController {
     @Autowired
     private OrderMessagingService orderMessagingService;
 
-
-
     @Autowired
     private OrderService orderService;
 
+    @InitBinder
+    public void initBinder(WebDataBinder binder) {
+        binder.registerCustomEditor(OrderItem.class,
+                new OrderItemEditor());
+    }
 
     /**
      * https://hackmd.io/@ryanjbaxter/spring-on-k8s-workshop
@@ -59,5 +62,34 @@ public class OrderController {
         return orderJpa.toString();
     }
 
+    @GetMapping("/create-order-form")
+    public ModelAndView createOrderForm() {
+        Order order = orderService.create();
+        OrderDto orderDto = new OrderDto();
+        Map<String, Object> modelMap = new HashMap<>();
+        modelMap.put("dto", orderDto);
+        // sito web https://www.codejava.net/frameworks/spring-boot/spring-boot-form-handling-tutorial-with-spring-form-tags-and-jsp
+        return new ModelAndView("createOrderForm", modelMap) ;
+    }
+
+    @GetMapping(value = "/order/{reference}",
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public Order getOrder(
+            @PathVariable("reference") String reference) {
+        return orderService.loadByReference(reference);
+    }
+
+
+    @PostMapping("/save-order")
+    public ModelAndView saveOrder(@ModelAttribute OrderDto dto, Model model) {
+//        model.addAttribute("books", bookService.findAll());
+//        return "redirect:/books/all";
+        if(dto.getAllOrderItems().isEmpty()) {
+            LOGGER.warn("No order items returned");
+        }
+        OrderJpa orderJpa = orderService.createFromDto(dto);
+        orderService.save(orderJpa);
+        return new ModelAndView("redirect:/order/" +orderJpa.getReference(), new HashMap<>());
+    }
 
 }
