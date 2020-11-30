@@ -52,7 +52,9 @@ public class OrderService {
         orderJpa.setId(dto.getId());
         orderJpa.setCreationDate(LocalDateTime.now());
         orderJpa.setOrderItems(
-        dto.getAllOrderItems().stream().map(orderItemDto -> {
+        dto.getAllOrderItems().stream()
+                .filter(orderItemDto -> orderItemDto.getQuantity() > 0)
+                .map(orderItemDto -> {
             ItemJpa byName = new ItemJpa(getByName(orderItemDto.getItem().getName()));
             OrderItem orderItem = new OrderItemJpa();
                     orderItem.setItem(byName);
@@ -64,6 +66,8 @@ public class OrderService {
         statusEvent.setEventDate(LocalDateTime.now());
         statusEvent.setIssuer("order-service");
         statusEvent.setStatus(Status.PENDING);
+        statusEvent.setOrder(orderJpa);
+        orderJpa.add(statusEvent);
         return orderJpa;
     }
 }

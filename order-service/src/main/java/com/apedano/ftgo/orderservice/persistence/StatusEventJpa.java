@@ -3,6 +3,7 @@ package com.apedano.ftgo.orderservice.persistence;
 import com.apedano.ftgo.model.Order;
 import com.apedano.ftgo.model.Status;
 import com.apedano.ftgo.model.StatusEvent;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -38,6 +39,7 @@ public class StatusEventJpa extends StatusEvent {
     @Override
     @ManyToOne(targetEntity = OrderJpa.class)
     @JoinColumn(name="order_id", nullable=false)
+    @JsonIgnore
     public Order getOrder() {
         return super.getOrder();
     }
