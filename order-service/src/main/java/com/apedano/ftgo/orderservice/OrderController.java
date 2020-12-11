@@ -57,7 +57,7 @@ public class OrderController {
         LOGGER.debug("Order created");
         orderService.save(orderJpa);
         LOGGER.debug("Order persisted");
-//        orderMessagingService.send(orderJpa);
+        orderMessagingService.send(orderJpa);
         LOGGER.debug("Order sent");
         return orderJpa.toString();
     }
@@ -89,6 +89,7 @@ public class OrderController {
         }
         OrderJpa orderJpa = orderService.createFromDto(dto);
         orderService.save(orderJpa);
+        orderMessagingService.send(orderJpa);
         return new ModelAndView("redirect:/order/" +orderJpa.getReference(), new HashMap<>());
     }
 
