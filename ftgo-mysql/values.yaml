@@ -79,18 +79,13 @@ tolerations: []
 
 affinity: {}
 
-envVars:
-  - name: MYSQL_ROOT_PASSWORD
-    keyFromSecret: mySqlRootPassword
-  - name: MYSQL_USER
-    keyFromSecret: mySqlUser
-  - name: MYSQL_PASSWORD
-    keyFromSecret: mySqlPassword
-
-auth:
-  rootPassword: myPassword
-  user: newUser
-  password: newPassword
+env:
+  secret:
+    MYSQL_ROOT_PASSWORD: mySqlRootPassword
+    MYSQL_USER: mySqlUser
+    MYSQL_PASSWORD: mySqlPassword
+  normal:
+    # include no secret env vars here key: value
 
 volume:
   name: mysql-storage
