@@ -1,0 +1,12 @@
+persistence:
+  enabled: false
+
+replicas: 1
+
+artemisUser: myuser
+
+artemisPassword: mypassword
+
+#resources:
+#  request:
+#    memory: 256Mi
